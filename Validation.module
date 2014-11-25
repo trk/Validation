@@ -1,0 +1,94 @@
+<?php
+
+class Validation extends WireData implements Module
+{
+
+    public static $Validator;
+
+    /**
+     * getModuleInfo is a module required by all modules to tell ProcessWire about them
+     *
+     * @return array
+     *
+     */
+    public static function getModuleInfo()
+    {
+
+        return array(
+
+            // The module'ss title, typically a little more descriptive than the class name
+            'title' => 'Validation Module',
+
+            // version number
+            'version' => 1,
+
+            // summary is brief description of what this module is
+            'summary' => 'Validation Module For ProcessWire',
+
+            // Optional URL to more information about the module
+            'href' => 'http://altivebir.com.tr',
+
+            // singular=true: indicates that only one instance of the module is allowed.
+            // This is usually what you want for modules that attach hooks.
+            'singular' => FALSE,
+
+            // autoload=true: indicates the module should be started with ProcessWire.
+            // This is necessary for any modules that attach runtime hooks, otherwise those
+            // hooks won't get attached unless some other code calls the module on it's own.
+            // Note that autoload modules are almost always also 'singular' (seen above).
+            'autoload' => TRUE,
+
+            // Optional font-awesome icon name, minus the 'fa-' part
+            'icon' => 'check-square-o',
+        );
+    }
+
+    public function __construct()
+    {
+        if (!class_exists('GUMP')) {
+            require_once(wire('config')->paths->Validation . 'Libraries' . DIRECTORY_SEPARATOR . 'gump.class.php');
+        }
+
+        self::$Validator = new Validator();
+    }
+
+    // Shorthand validation
+    public static function is_valid(array $data, array $validators) { return self::$Validator->is_valid($data, $validators); }
+
+    // Get or set the validation rules
+    public static function validation_rules(array $rules) { return self::$Validator->validation_rules($rules); }
+
+    // Get or set the filtering rules
+    public static function filter_rules(array $rules) { self::$Validator->filter_rules($rules); }
+
+    // Runs the filter and validation routines
+    public static function run(array $data) { return self::$Validator->run($data); }
+
+    // Strips and encodes unwanted characters
+    public static function xss_clean(array $data) { return self::$Validator->xss_clean($data); }
+
+    // Sanitizes data and converts strings to UTF-8 (if available),
+    // optionally according to the provided field whitelist
+    public static function sanitize(array $input, $whitelist = NULL) { return self::$Validator->sanitize($input, $whitelist); }
+
+    // Validates input data according to the provided ruleset (see example)
+    public static function validate(array $input, array $ruleset) { return self::$Validator->validate($input, $ruleset); }
+
+    // Filters input data according to the provided filterset (see example)
+    public static function filter(array $input, array $filterset) { return self::$Validator->filter($input, $filterset); }
+
+    // Returns human readable error text in an array or string
+    public static function get_readable_errors($convert_to_string = false) { return self::$Validator->get_readable_errors($convert_to_string); }
+
+    // Fetch an array of validation errors indexed by the field names
+    public static function get_errors_array() { return self::$Validator->get_errors_array(); }
+
+    // Override field names with readable ones for errors
+    public static function set_field_name($field, $readable_name) { self::$Validator->set_field_name($field, $readable_name); }
+
+    // Set & Get Fields ::
+    public static function setFields(array $fields) { return self::$Validator->setFields($fields); }
+
+    // Get and set the field labels
+    public static function set_field_labels(array $labels) { return self::$Validator->set_field_labels($labels); }
+}
