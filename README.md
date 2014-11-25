@@ -11,44 +11,44 @@ Validation Module for ProcessWire, Validation module using [GUMP](https://github
 
 ```php
 // Set & Get Fields (Extended Method)
-Validation::setFields(array $fields);
+setFields(array $fields);
 
 // Set Field Labels (Extended Method)
-Validation::set_field_labels(array $labels);
+set_field_labels(array $labels);
 
 // Shorthand validation
-Validation::is_valid(array $data, array $rules) 
+is_valid(array $data, array $rules) 
 
 // Get or set the validation rules
-Validation::validation_rules(array $rules); 
+validation_rules(array $rules); 
 
 // Get or set the filtering rules
-Validation::filter_rules(array $rules); 
+filter_rules(array $rules); 
 
 // Runs the filter and validation routines
-Validation::run(array $data); 
+run(array $data); 
 
 // Strips and encodes unwanted characters
-Validation::xss_clean(array $data); 
+xss_clean(array $data); 
 
 // Sanitizes data and converts strings to UTF-8 (if available), 
 // optionally according to the provided field whitelist
-Validation::sanitize(array $input, $whitelist = NULL); 
+sanitize(array $input, $whitelist = NULL); 
 
 // Validates input data according to the provided ruleset (see example)
-Validation::validate(array $input, array $ruleset); 
+validate(array $input, array $ruleset); 
 
 // Filters input data according to the provided filterset (see example)
-Validation::filter(array $input, array $filterset); 
+filter(array $input, array $filterset); 
 
 // Returns human readable error text in an array or string
-Validation::get_readable_errors($convert_to_string = false); 
+get_readable_errors($convert_to_string = false); 
 
 // Fetch an array of validation errors indexed by the field names
-Validation::get_errors_array();
+get_errors_array();
 
 // Override field names with readable ones for errors
-Validation::set_field_name($field, $readable_name);
+set_field_name($field, $readable_name);
 ```
 
 # Example (Long format)
