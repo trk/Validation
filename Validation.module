@@ -26,7 +26,7 @@ class Validation extends WireData implements Module
             'summary' => 'Validation Module For ProcessWire',
 
             // Optional URL to more information about the module
-            'href' => 'http://altivebir.com.tr',
+            'href' => 'https://github.com/trk/Validation',
 
             // singular=true: indicates that only one instance of the module is allowed.
             // This is usually what you want for modules that attach hooks.
