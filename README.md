@@ -136,9 +136,8 @@ if($isValid !== TRUE)
     echo "<input type='submit' value='Submit' />";
     echo "</form>";
 }
-
-//————————————————————————————————
-
+```
+```php
 $validator = new Validation();
 
 $_POST = $validator->sanitize($_POST);  //  You don't have to sanitize, but it's safest to do so.
