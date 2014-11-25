@@ -56,8 +56,86 @@ Validation::set_field_name($field, $readable_name);
 The following example is part of a registration form, the flow should be pretty standard
 
 ```php
-# Note that filters and validators are separate rule sets and method calls. There is a good reason for this.
-// Set Fields With Options $Fields = [     'firstname' => [         'label'     => __('First Name'),         'rule'      => 'required|max_len,100|min_len,3',         'filter'    => 'sanitize_string',         'type'      => 'text'     ],     'lastname' => [         'label'     => __('Last Name'),         'rule'      => 'required|max_len,100|min_len,3',         'filter'    => 'sanitize_string',         'type'      => 'text'     ],     'email'	=> [         'label'     => __('E-mail'),         'rule'      => 'required|valid_email',         'filter'    => 'sanitize_string',         'type'      => 'text'     ],     'subject' => [         'label'     => __('Subject'),         'rule'      => 'required',         'filter'    => 'sanitize_string',         'type'      => 'text'     ],     'message' => [         'label'     => __('Message'),         'rule'      => 'required',         'filter'    => 'sanitize_string',         'type'      => 'textarea'     ] ];  // Call Validation Module $Validation = new Validation();  // Set Form Fields Validations $Fields = $Validation->setFields($Fields);  // You don't have to sanitize, but it's safest to do so. $_POST = $Validation->sanitize($_POST);  // Set rules and run ! Cheate a variable for check form post validated? $isValid = $Validation->is_valid($_POST, $Fields['Rules']);  // Check Post Data if($_POST) {     // valid     if($isValid === TRUE) {         echo "<h4>Your form validation is ok !</h4>";         echo "<p>Your form validation is ok, now you can do what you want !</p>";     }     // notValid     else {         echo "<h4>Your form validations isn't ok, check following errors !</h4>";             foreach($isValid as $key => $errors)                 echo $errors.'<br />';     } } // Check if form validation not ok, show our form if($isValid !== TRUE) {     // Create form !     echo "<form method='post'>";     foreach($Fields['Fields'] as $key => $field)     {         switch($field['type'])         {             case 'textarea':                 echo "<label for='{$key}'>{$field['label']}</label> <textarea id='{$key}' name='{$key}'>{$field['value']}</textarea><br />";                 break;             default:                 echo "<label for='{$key}'>{$field['label']}</label> <input type='text' id='{$key}' name='{$key}' value='{$field['value']}' /><br />";                 break;         }     }     echo "<input type='submit' value='Submit' />";     echo "</form>"; }
+// Set Fields With Options
+$Fields = [
+    'firstname' => [
+        'label'     => __('First Name'),
+        'rule'      => 'required|max_len,100|min_len,3',
+        'filter'    => 'sanitize_string',
+        'type'      => 'text'
+    ],
+    'lastname' => [
+        'label'     => __('Last Name'),
+        'rule'      => 'required|max_len,100|min_len,3',
+        'filter'    => 'sanitize_string',
+        'type'      => 'text'
+    ],
+    'email'	=> [
+        'label'     => __('E-mail'),
+        'rule'      => 'required|valid_email',
+        'filter'    => 'sanitize_string',
+        'type'      => 'text'
+    ],
+    'subject' => [
+        'label'     => __('Subject'),
+        'rule'      => 'required',
+        'filter'    => 'sanitize_string',
+        'type'      => 'text'
+    ],
+    'message' => [
+        'label'     => __('Message'),
+        'rule'      => 'required',
+        'filter'    => 'sanitize_string',
+        'type'      => 'textarea'
+    ]
+];
+
+// Call Validation Module
+$Validation = new Validation();
+
+// Set Form Fields Validations
+$Fields = $Validation->setFields($Fields);
+
+// You don't have to sanitize, but it's safest to do so.
+$_POST = $Validation->sanitize($_POST);
+
+// Set rules and run ! Cheate a variable for check form post validated?
+$isValid = $Validation->is_valid($_POST, $Fields['Rules']);
+
+// Check Post Data
+if($_POST) {
+    // valid
+    if($isValid === TRUE) {
+        echo "<h4>Your form validation is ok !</h4>";
+        echo "<p>Your form validation is ok, now you can do what you want !</p>";
+    }
+    // notValid
+    else {
+        echo "<h4>Your form validations isn't ok, check following errors !</h4>";
+            foreach($isValid as $key => $errors)
+                echo $errors.'<br />';
+    }
+}
+// Check if form validation not ok, show our form
+if($isValid !== TRUE)
+{
+    // Create form !
+    echo "<form method='post'>";
+    foreach($Fields['Fields'] as $key => $field)
+    {
+        switch($field['type'])
+        {
+            case 'textarea':
+                echo "<label for='{$key}'>{$field['label']}</label> <textarea id='{$key}' name='{$key}'>{$field['value']}</textarea><br />";
+                break;
+            default:
+                echo "<label for='{$key}'>{$field['label']}</label> <input type='text' id='{$key}' name='{$key}' value='{$field['value']}' /><br />";
+                break;
+        }
+    }
+    echo "<input type='submit' value='Submit' />";
+    echo "</form>";
+}
 
 //————————————————————————————————
 
