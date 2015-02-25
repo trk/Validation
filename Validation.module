@@ -3,9 +3,9 @@
 /**
  * Class Validation
  *
- * @author			: İskender TOTOĞLU, @ukyo (community), @trk (Github)
- * @website			: http://altivebir.com.tr
- * @projectWebsite	: https://github.com/trk/Validation
+ * @author          : İskender TOTOĞLU, @ukyo (community), @trk (Github)
+ * @website         : http://altivebir.com.tr
+ * @projectWebsite  : https://github.com/trk/Validation
  */
 class Validation extends WireData implements Module
 {
@@ -23,10 +23,10 @@ class Validation extends WireData implements Module
 
         return array(
             'title' => __('Validation Module'),
-			'summary' => __('Validation Module For ProcessWire'),
-			'version' => 2,
-			'author' => 'İskender TOTOĞLU | @ukyo(community), @trk (Github), http://altivebir.com.tr',
-			'href' => 'https://github.com/trk/Validation',
+            'summary' => __('Validation Module For ProcessWire'),
+            'version' => 2,
+            'author' => 'İskender TOTOĞLU | @ukyo(community), @trk (Github), http://altivebir.com.tr',
+            'href' => 'https://github.com/trk/Validation',
             'icon' => 'check-square-o',
             'singular' => FALSE,
             'autoload' => TRUE
