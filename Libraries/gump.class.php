@@ -50,6 +50,8 @@ class GUMP
 	/**
 	 * Shorthand method for inline validation
 	 *
+     * @NOTE: Edited for Label support for Fields
+     *
 	 * @param array $data The data to be validated
 	 * @param array $validators The GUMP validators
 	 * @return mixed True(boolean) or the array of error messages
@@ -403,6 +405,15 @@ class GUMP
 	 * @return array
 	 * @return string
 	 */
+    
+    /**
+     * Process the validation errors and return human readable error messages
+     *
+     * @NOTE: Edited for multi-language message support @translations inside module class
+     * @param array $options toString | fieldClass | errorClass
+     * @param array $labels
+     * @return mixed
+     */
 	public function get_readable_errors($options = array(), $labels = array())
 	{
         $options = array(
