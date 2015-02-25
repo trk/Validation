@@ -10,7 +10,10 @@
 class Validation extends WireData implements Module
 {
     public static $Validator;
+    // Field Labels
     private static $labels = array();
+    // field characters below will be replaced with a space.
+    protected $fieldCharsToRemove = array('_','-');
 
     /**
      * getModuleInfo is a module required by all modules to tell ProcessWire about them
@@ -194,7 +197,6 @@ class Validation extends WireData implements Module
             $translations = self::translations();
             
             $field = ucwords(str_replace($this->fieldCharsToRemove, chr(32), $e['field']));
-            $param = $e['param'];
 
             // Let's fetch explicit field names if they exist
             if(array_key_exists($e['field'], $fields)) {
@@ -207,7 +209,7 @@ class Validation extends WireData implements Module
             }
 
             $field = "<span class='{$fieldClass}'>{$field}</span>";
-            $param = "<span class='{$fieldWarningClass}'>$param</span>";
+            $param = "<span class='{$fieldWarningClass}'>{$e['param']}</span>";
 
             switch($e['rule']) {
                 case 'mismatch' :
@@ -342,10 +344,10 @@ class Validation extends WireData implements Module
     public static function filter(array $input, array $filterset) { return self::$Validator->filter($input, $filterset); }
 
     // Returns human readable error text in an array or string
-    public static function get_readable_errors($convert_to_string = false) { return self::$Validator->get_readable_errors($convert_to_string); }
+    public static function get_readable_errors($options=array()) { return self::$Validator->get_readable_errors($options); }
 
     // Fetch an array of validation errors indexed by the field names
-    public static function get_errors_array() { return self::$Validator->get_errors_array(); }
+    // public static function get_errors_array() { return self::$Validator->get_errors_array(); }
 
     // Override field names with readable ones for errors
     public static function set_field_name($field, $readable_name) { self::$Validator->set_field_name($field, $readable_name); }
