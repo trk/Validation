@@ -2,8 +2,8 @@
 
 class Validation extends WireData implements Module
 {
-
     public static $Validator;
+    private static $labels = array();
 
     /**
      * getModuleInfo is a module required by all modules to tell ProcessWire about them
@@ -20,7 +20,7 @@ class Validation extends WireData implements Module
             'title' => 'Validation Module',
 
             // version number
-            'version' => 1,
+            'version' => 2,
 
             // summary is brief description of what this module is
             'summary' => 'Validation Module For ProcessWire',
@@ -49,7 +49,278 @@ class Validation extends WireData implements Module
             require_once(wire('config')->paths->Validation . 'Libraries' . DIRECTORY_SEPARATOR . 'gump.class.php');
         }
 
-        self::$Validator = new Validator();
+        self::$Validator = new GUMP();
+    }
+
+    /**
+     * Set field labels
+     * @param array $labels
+     * @return mixed
+     */
+    public function set_field_labels(array $labels = array())
+    {
+        if(empty($labels)) {
+            return static::$labels;
+        }
+
+        static::$labels = $labels;
+    }
+
+    /**
+     * Set Fields -> labels, rules, filters, types, visible | informations
+     *
+     * @param array $fields
+     * @return array
+     */
+    public function setFields(array $fields)
+    {
+        $_POST  = self::$Validator->sanitize($_POST);
+
+        $_Fields    = array();
+
+        if( ! empty($fields) )
+        {
+            // Create empty arrays for Rules, Labels, Filters
+            $rules      = array();
+            $filters    = array();
+            $labels     = array();
+
+            // Set Field labels|rules|filters
+            foreach($fields as $key => $field)
+            {
+                // Check if we have posted data, set field values
+                if(array_key_exists($key, $_POST))
+                    $fields[$key]['value']  = $_POST[$key];
+                // If we don't have a "value" key create empty "value" key
+                else
+                    $fields[$key]['value']  = ( empty($fields[$key]['value']) ) ? '' : $fields[$key]['value'];
+
+                // Set Visible Option : Default :: 1
+                $fields[$key]['visible']  = (! array_key_exists('visible', $fields[$key])) ? 1 : $fields[$key]['visible'];
+                // Set Hidden Option : Default :: 0
+                $fields[$key]['hidden']  = (! array_key_exists('hidden', $fields[$key])) ? FALSE : $fields[$key]['hidden'];
+                // Set Field Type
+                $fields[$key]['type']  = ( empty($fields[$key]['type']) ) ? 'text' : $fields[$key]['type'];
+                // Set Labels
+                $fields[$key]['label']  = ( empty($fields[$key]['label']) ) ? '' : $fields[$key]['label'];
+                $labels[$key]   = $fields[$key]['label'];
+                // Set Rules
+                if( ! empty($fields[$key]['rule']) ){
+                    // $fields['fields'][$key]['rule']  = ( empty($fields[$key]['rule']) ) ? '' : $fields[$key]['rule'];
+                    $rules[$key]  = $fields[$key]['rule'];
+                }
+                // Set Filters
+                if( ! empty($fields[$key]['filter']) ){
+                    // $fields[$key]['filter']  = ( empty($fields[$key]['filter']) ) ? '' : $fields[$key]['filter'];
+                    $filters[$key]  = $fields[$key]['filter'];
+                }
+            }
+
+            // Set Fields Rules
+            self::$Validator->validation_rules($rules);
+            // Set Fields Filters
+            self::$Validator->filter_rules($filters);
+            // Set Fields Labels
+            self::set_field_labels($labels);
+
+            $_Fields = array(
+                'Fields' => $fields,
+                'Rules' => $rules,
+                'Filters' => $filters,
+                'Labels' => $labels
+            );
+        }
+
+        // Return Fields
+        return $_Fields;
+    }
+
+    /**
+     * Module Translations
+     *
+     * @return array
+     */
+    public function translations() {
+
+        $translations = array(
+            'mismatch'                  => __("There is no validation rule for \"%s\""),
+            'validate_required'         => __("The \"%s\" field is required"),
+            'validate_valid_email'      => __("The \"%s\" field is required to be a valid email address"),
+            'validate_max_len_1'        => __("The \"%s\" field needs to be shorter than \"%s\" character"),
+            'validate_max_len_2'        => __("The \"%s\" field needs to be shorter than \"%s\" characters"),
+            'validate_min_len_1'        => __("The \"%s\" field needs to be longer than \"%s\" character"),
+            'validate_min_len_2'        => __("The \"%s\" field needs to be longer than \"%s\" characters"),
+            'validate_exact_len_1'      => __("The \"%s\" field needs to be exactly \"%s\" character in length"),
+            'validate_exact_len_2'      => __("The \"%s\" field needs to be exactly \"%s\" characters in length"),
+            'validate_alpha'            => __("The \"%s\" field may only contain alpha characters(a-z)"),
+            'validate_alpha_numeric'    => __("The \"%s\" field may only contain alpha-numeric characters"),
+            'validate_alpha_dash'       => __("The \"%s\" field may only contain alpha characters &amp; dashes"),
+            'validate_numeric'          => __("The \"%s\" field may only contain numeric characters"),
+            'validate_integer'          => __("The \"%s\" field may only contain a numeric value"),
+            'validate_boolean'          => __("The \"%s\" field may only contain a true or false value"),
+            'validate_float'            => __("The \"%s\" field may only contain a float value"),
+            'validate_valid_url'        => __("The \"%s\" field is required to be a valid URL"),
+            'validate_url_exists'       => __("The \"%s\" URL does not exist"),
+            'validate_valid_ip'         => __("The \"%s\" field needs to contain a valid IP address"),
+            'validate_valid_cc'         => __("The \"%s\" field needs to contain a valid credit card number"),
+            'validate_valid_name'       => __("The \"%s\" field needs to contain a valid human name"),
+            'validate_contains'         => __("The \"%s\" field needs to contain one of these values: \"%s\""),
+            'validate_containsList'     => __("The \"%s\" field needs contain a value from its drop down list"),
+            'validate_doesNotContainList' => __("The \"%s\" field contains a value that is not accepted"),
+            'validate_street_address'   => __("The \"%s\" field needs to be a valid street address"),
+            'validate_date'             => __("The \"%s\" field needs to be a valid date"),
+            'validate_min_numeric'      => __("The \"%s\" field needs to be a numeric value, equal to, or higher than \"%s\""),
+            'validate_max_numeric'      => __("The \"%s\" field needs to be a numeric value, equal to, or lower than \"%s\""),
+            'validate_starts'           => __("The \"%s\" field needs to start with \"%s\""),
+            'default'                   => __("The \"%s\" field is invalid")
+        );
+
+        return $translations;
+    }
+
+    public function _get_readable_errors($options=array(), $errors=array(), $fields=array(), $labels=array())
+    {
+        $options = array(
+            'toString' => (!empty($options['toString'])) ? true : false,
+            'fieldClass' => (!empty($options['fieldClass'])) ? $options['fieldClass'] : 'field',
+            'errorClass' => (!empty($options['errorClass'])) ? $options['errorClass'] : 'error-message',
+        );
+
+        $toString = $options['toString'];
+        $fieldClass = $options['fieldClass'];
+        $errorClass = $options['errorClass'];
+
+
+        if(empty($errors)) {
+            return ($toString)? null : array();
+        }
+
+        $resp = array();
+
+        foreach($errors as $e) {
+
+            $translations = self::translations();
+            
+            $field = ucwords(str_replace($this->fieldCharsToRemove, chr(32), $e['field']));
+            $param = $e['param'];
+
+            // Let's fetch explicit field names if they exist
+            if(array_key_exists($e['field'], $fields)) {
+                $field = $fields[$e['field']];
+            }
+
+            // If field have a label get field label
+            if(array_key_exists($e['field'], $labels)) {
+                $field = $labels[$e['field']];
+            }
+
+            $field = "<span class='{$fieldClass}'>{$field}</span>";
+
+            switch($e['rule']) {
+                case 'mismatch' :
+                    $resp[] = sprintf($translations['mismatch'], $field);
+                    break;
+                case 'validate_required':
+                    $resp[] = sprintf($translations['validate_required'], $field);
+                    break;
+                case 'validate_valid_email':
+                    $resp[] = sprintf($translations['validate_valid_email'], $field);
+                    break;
+                case 'validate_max_len':
+                    if($param == 1) {
+                        $resp[] = sprintf($translations['validate_max_len_1'], $field, $param);
+                    } else {
+                        $resp[] = sprintf($translations['validate_max_len_2'], $field, $param);
+                    }
+                    break;
+                case 'validate_min_len':
+                    if($param == 1) {
+                        $resp[] = sprintf($translations['validate_min_len_1'], $field, $param);
+                    } else {
+                        $resp[] = sprintf($translations['validate_min_len_2'], $field, $param);
+                    }
+                    break;
+                case 'validate_exact_len':
+                    if($param == 1) {
+                        $resp[] = sprintf($translations['validate_exact_len_1'], $field, $param);
+                    } else {
+                        $resp[] = sprintf($translations['validate_exact_len_2'], $field, $param);
+                    }
+                    break;
+                case 'validate_alpha':
+                    $resp[] = sprintf($translations['validate_alpha'], $field);
+                    break;
+                case 'validate_alpha_numeric':
+                    $resp[] = sprintf($translations['validate_alpha_numeric'], $field);
+                    break;
+                case 'validate_alpha_dash':
+                    $resp[] = sprintf($translations['validate_alpha_dash'], $field);
+                    break;
+                case 'validate_numeric':
+                    $resp[] = sprintf($translations['validate_numeric'], $field);
+                    break;
+                case 'validate_integer':
+                    $resp[] = sprintf($translations['validate_integer'], $field);
+                    break;
+                case 'validate_boolean':
+                    $resp[] = sprintf($translations['validate_boolean'], $field);
+                    break;
+                case 'validate_float':
+                    $resp[] = sprintf($translations['validate_float'], $field);
+                    break;
+                case 'validate_valid_url':
+                    $resp[] = sprintf($translations['validate_valid_url'], $field);
+                    break;
+                case 'validate_url_exists':
+                    $resp[] = sprintf($translations['validate_url_exists'], $field);
+                    break;
+                case 'validate_valid_ip':
+                    $resp[] = sprintf($translations['validate_valid_ip'], $field);
+                    break;
+                case 'validate_valid_cc':
+                    $resp[] = sprintf($translations['validate_valid_cc'], $field);
+                    break;
+                case 'validate_valid_name':
+                    $resp[] = sprintf($translations['validate_valid_name'], $field);
+                    break;
+                case 'validate_contains':
+                    $resp[] = sprintf($translations['validate_contains'], $field, implode(', ', $param));
+                    break;
+                case 'validate_containsList':
+                    $resp[] = sprintf($translations['validate_containsList'], $field);
+                    break;
+                case 'validate_doesNotContainList':
+                    $resp[] = sprintf($translations['validate_doesNotContainList'], $field);
+                    break;
+                case 'validate_street_address':
+                    $resp[] = sprintf($translations['validate_street_address'], $field);
+                    break;
+                case 'validate_date':
+                    $resp[] = sprintf($translations['validate_date'], $field);
+                    break;
+                case 'validate_min_numeric':
+                    $resp[] = sprintf($translations['validate_min_numeric'], $field, $param);
+                    break;
+                case 'validate_max_numeric':
+                    $resp[] = sprintf($translations['validate_max_numeric'], $field, $param);
+                    break;
+                case 'validate_starts':
+                    $resp[] = sprintf($translations['validate_starts'], $field, $param);
+                    break;
+                default:
+                    $resp[] = sprintf($translations['default'], $field);
+            }
+        }
+
+        if(!$toString) {
+            return $resp;
+        } else {
+            $buffer = '';
+            foreach($resp as $s) {
+                $buffer .= "<span class=\"$errorClass\">$s</span>";
+            }
+            return $buffer;
+        }
     }
 
     // Shorthand validation
@@ -85,10 +356,4 @@ class Validation extends WireData implements Module
 
     // Override field names with readable ones for errors
     public static function set_field_name($field, $readable_name) { self::$Validator->set_field_name($field, $readable_name); }
-
-    // Set & Get Fields ::
-    public static function setFields(array $fields) { return self::$Validator->setFields($fields); }
-
-    // Get and set the field labels
-    public static function set_field_labels(array $labels) { return self::$Validator->set_field_labels($labels); }
 }
