@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Class Validation
+ *
+ * @author			: İskender TOTOĞLU, @ukyo (community), @trk (Github)
+ * @website			: http://altivebir.com.tr
+ * @projectWebsite	: https://github.com/trk/Validation
+ */
 class Validation extends WireData implements Module
 {
     public static $Validator;
@@ -15,31 +22,14 @@ class Validation extends WireData implements Module
     {
 
         return array(
-
-            // The module'ss title, typically a little more descriptive than the class name
-            'title' => 'Validation Module',
-
-            // version number
-            'version' => 2,
-
-            // summary is brief description of what this module is
-            'summary' => 'Validation Module For ProcessWire',
-
-            // Optional URL to more information about the module
-            'href' => 'https://github.com/trk/Validation',
-
-            // singular=true: indicates that only one instance of the module is allowed.
-            // This is usually what you want for modules that attach hooks.
-            'singular' => FALSE,
-
-            // autoload=true: indicates the module should be started with ProcessWire.
-            // This is necessary for any modules that attach runtime hooks, otherwise those
-            // hooks won't get attached unless some other code calls the module on it's own.
-            // Note that autoload modules are almost always also 'singular' (seen above).
-            'autoload' => TRUE,
-
-            // Optional font-awesome icon name, minus the 'fa-' part
+            'title' => __('Validation Module'),
+			'summary' => __('Validation Module For ProcessWire'),
+			'version' => 2,
+			'author' => 'İskender TOTOĞLU | @ukyo(community), @trk (Github), http://altivebir.com.tr',
+			'href' => 'https://github.com/trk/Validation',
             'icon' => 'check-square-o',
+            'singular' => FALSE,
+            'autoload' => TRUE
         );
     }
 
