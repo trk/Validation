@@ -100,7 +100,7 @@ $Fields = $Validation->setFields($Fields);
 $_POST = $Validation->sanitize($_POST);
 
 // Set rules and run ! Cheate a variable for check form post validated?
-$isValid = $Validation->is_valid($_POST, $Fields['Rules']);
+$isValid = $Validation->is_valid($_POST, $Fields);
 
 // Check Post Data
 if($_POST) {
