@@ -405,7 +405,7 @@ class GUMP
 	 * @return array
 	 * @return string
 	 */
-    
+
     /**
      * Process the validation errors and return human readable error messages
      *
@@ -417,9 +417,7 @@ class GUMP
 	public function get_readable_errors($options = array(), $labels = array())
 	{
         $options = array(
-            'toString' => (!empty($options['toString'])) ? true : false,
-            'fieldClass' => (!empty($options['fieldClass'])) ? $options['fieldClass'] : 'field',
-            'errorClass' => (!empty($options['errorClass'])) ? $options['errorClass'] : 'error-message',
+            'toString' => ((!empty($options['toString'])) ? true : false)
         );
 
         return wire('modules')->get('Validation')->_get_readable_errors(

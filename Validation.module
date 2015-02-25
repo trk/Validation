@@ -24,7 +24,7 @@ class Validation extends WireData implements Module
         return array(
             'title' => __('Validation Module'),
             'summary' => __('Validation Module For ProcessWire'),
-            'version' => 2,
+            'version' => 3,
             'author' => 'İskender TOTOĞLU | @ukyo(community), @trk (Github), http://altivebir.com.tr',
             'href' => 'https://github.com/trk/Validation',
             'icon' => 'check-square-o',
@@ -172,12 +172,14 @@ class Validation extends WireData implements Module
     {
         $options = array(
             'toString' => (!empty($options['toString'])) ? true : false,
-            'fieldClass' => (!empty($options['fieldClass'])) ? $options['fieldClass'] : 'field',
-            'errorClass' => (!empty($options['errorClass'])) ? $options['errorClass'] : 'error-message',
+            'fieldClass' => (!empty($options['fieldClass'])) ? $options['fieldClass'] : 'validation-field',
+            'fieldWarningClass' => (!empty($options['fieldWarningClass'])) ? $options['fieldWarningClass'] : 'validation-field-warning',
+            'errorClass' => (!empty($options['errorClass'])) ? $options['errorClass'] : 'validation-error',
         );
 
         $toString = $options['toString'];
         $fieldClass = $options['fieldClass'];
+        $fieldWarningClass = $options['fieldWarningClass'];
         $errorClass = $options['errorClass'];
 
 
@@ -205,6 +207,7 @@ class Validation extends WireData implements Module
             }
 
             $field = "<span class='{$fieldClass}'>{$field}</span>";
+            $param = "<span class='{$fieldWarningClass}'>$param</span>";
 
             switch($e['rule']) {
                 case 'mismatch' :
