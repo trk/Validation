@@ -25,8 +25,8 @@ class Validation extends WireData implements Module
     {
 
         return array(
-            'title' => __('Validation Module'),
-            'summary' => __('Validation Module For ProcessWire'),
+            'title' => 'Validation Module',
+            'summary' => 'Validation Module For ProcessWire',
             'version' => 3,
             'author' => 'İskender TOTOĞLU | @ukyo(community), @trk (Github), http://altivebir.com.tr',
             'href' => 'https://github.com/trk/Validation',
